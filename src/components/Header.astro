@@ -1,0 +1,71 @@
+---
+import { t, languages, langs, type Lang } from '../i18n';
+interface Props { lang: Lang; path?: string }
+const { lang, path = '' } = Astro.props;
+const d = t(lang);
+const base = `/${lang}/`;
+const links = [
+  ['about', d.nav.about],
+  ['lessons', d.nav.lessons],
+  ['pet-sitting', d.nav.petSitting],
+  ['availability', d.nav.availability],
+  ['gallery', d.nav.gallery],
+  ['faq', d.nav.faq],
+];
+---
+<header class="sticky top-0 z-50 border-b border-line/70 bg-cream/85 backdrop-blur">
+  <nav class="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3">
+    <a href={base} class="flex items-center gap-2 font-display text-xl font-semibold">
+      <span aria-hidden="true" class="grid size-9 place-items-center rounded-full bg-coral text-lg text-white">🐾</span>
+      Gökçen
+    </a>
+    <ul class="ml-6 hidden items-center gap-5 text-sm font-bold text-muted lg:flex">
+      {links.map(([id, label]) => <li><a class="hover:text-coral" href={`${base}#${id}`}>{label}</a></li>)}
+    </ul>
+    <div class="ml-auto flex items-center gap-2">
+      <details class="relative">
+        <summary class="flex cursor-pointer list-none items-center gap-1 rounded-full border border-line px-3 py-1.5 text-sm font-bold" aria-label={d.nav.language}>
+          🌍 {lang.toUpperCase()}
+        </summary>
+        <ul class="card absolute right-0 mt-2 w-36 overflow-hidden p-1 text-sm">
+          {langs.map((l) => (
+            <li>
+              <a href={`/${l}/${path}`} data-lang={l} class:list={['lang-link block rounded-xl px-3 py-2 hover:bg-cream', l === lang && 'font-bold text-coral']} hreflang={l}>
+                {languages[l]}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+      <button id="theme-toggle" type="button" class="grid size-9 place-items-center rounded-full border border-line" aria-label="Toggle dark mode">
+        <span class="dark:hidden" aria-hidden="true">🌙</span><span class="hidden dark:inline" aria-hidden="true">☀️</span>
+      </button>
+      <a href={`${base}#request`} class="btn-bone btn-primary hidden !py-2 text-sm sm:inline-flex">{d.nav.book}</a>
+      <button id="menu-toggle" type="button" class="grid size-9 place-items-center rounded-full border border-line lg:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+  <ul id="mobile-menu" class="hidden border-t border-line px-4 pb-4 pt-2 font-bold lg:hidden">
+    {links.map(([id, label]) => <li><a class="block py-2" href={`${base}#${id}`}>{label}</a></li>)}
+    <li><a class="block py-2 text-coral" href={`${base}#request`}>{d.nav.book}</a></li>
+  </ul>
+</header>
+<script>
+  const root = document.documentElement;
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try { localStorage.setItem('theme', next); } catch {}
+  });
+  const menu = document.getElementById('mobile-menu');
+  const toggle = document.getElementById('menu-toggle');
+  toggle?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('hidden') === false;
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+  menu?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).tagName === 'A') { menu.classList.add('hidden'); toggle?.setAttribute('aria-expanded', 'false'); }
+  });
+  document.querySelectorAll<HTMLAnchorElement>('.lang-link').forEach((a) =>
+    a.addEventListener('click', () => { try { localStorage.setItem('lang', a.dataset.lang!); } catch {} })
+  );
+</script>

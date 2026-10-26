@@ -1,0 +1,212 @@
+---
+import { t, languages, type Lang } from '../i18n';
+import { business } from '../config/business';
+import SectionTitle from './SectionTitle.astro';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang).form;
+const lessonTypes = t(lang).lessons.types.map((x) => x.title);
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA';
+const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+---
+<section id="request" class="mx-auto max-w-3xl px-4 py-20">
+  <SectionTitle tag={d.tag} title={d.title} intro={d.intro} />
+  <div class="card relative p-6 sm:p-10">
+    <form id="request-form" class="space-y-6" novalidate data-required-msg={d.required}>
+      <fieldset>
+        <legend class="label">{d.type}</legend>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="card flex cursor-pointer items-center justify-center gap-2 p-4 font-display text-lg font-semibold has-checked:border-coral has-checked:bg-coral/10">
+            <input type="radio" name="type" value="lesson" class="sr-only" checked /> 📚 {d.typeLesson}
+          </label>
+          <label class="card flex cursor-pointer items-center justify-center gap-2 p-4 font-display text-lg font-semibold has-checked:border-coral has-checked:bg-coral/10">
+            <input type="radio" name="type" value="pet" class="sr-only" /> 🐶 {d.typePet}
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <div><label class="label" for="f-name">{d.name} *</label><input class="field" id="f-name" name="name" required maxlength="100" autocomplete="name" /></div>
+        <div><label class="label" for="f-email">{d.email} *</label><input class="field" id="f-email" name="email" type="email" required maxlength="200" autocomplete="email" /></div>
+        <div><label class="label" for="f-phone">{d.phone}</label><input class="field" id="f-phone" name="phone" type="tel" maxlength="40" autocomplete="tel" /></div>
+        <div>
+          <label class="label" for="f-lang">{d.language}</label>
+          <select class="field" id="f-lang" name="lang">
+            {Object.entries(languages).map(([k, v]) => <option value={k} selected={k === lang}>{v}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div data-for="lesson" class="space-y-4">
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label class="label" for="f-level">{d.level}</label>
+            <select class="field" id="f-level" name="level">
+              <option value="">{d.levelUnknown}</option>
+              {levels.map((l) => <option>{l}</option>)}
+            </select>
+            <a href="#level-quiz" class="mt-1 inline-block text-sm font-bold text-coral">🧠 {d.takeQuiz}</a>
+          </div>
+          <div>
+            <label class="label" for="f-ltype">{d.lessonType}</label>
+            <select class="field" id="f-ltype" name="lessonType">
+              {lessonTypes.map((x) => <option>{x}</option>)}
+            </select>
+          </div>
+        </div>
+        <div><label class="label" for="f-goal">{d.goal}</label><input class="field" id="f-goal" name="goal" maxlength="300" /></div>
+        <div>
+          <label class="label" for="f-slots">{d.slots}</label>
+          <textarea class="field" id="f-slots" name="slots" rows="2" maxlength="500"></textarea>
+          <p class="mt-1 text-sm text-muted">{d.slotsHint}</p>
+        </div>
+        <label class="flex items-center gap-2"><input type="checkbox" name="trial" checked class="size-5 accent-coral" /> {d.trial}</label>
+      </div>
+
+      <div data-for="pet" class="hidden space-y-4">
+        <div class="grid gap-4 sm:grid-cols-3">
+          <div><label class="label" for="f-pet">{d.petName} *</label><input class="field" id="f-pet" name="petName" maxlength="60" data-required /></div>
+          <div><label class="label" for="f-breed">{d.breed}</label><input class="field" id="f-breed" name="breed" maxlength="100" /></div>
+          <div><label class="label" for="f-age">{d.age}</label><input class="field" id="f-age" name="age" maxlength="30" /></div>
+        </div>
+        <fieldset>
+          <legend class="label">{d.size}</legend>
+          <div class="flex flex-wrap gap-2">
+            {Object.entries(d.sizes).map(([k, v], i) => (
+              <label class="cursor-pointer rounded-full border border-line px-4 py-1.5 font-bold has-checked:border-coral has-checked:bg-coral has-checked:text-white">
+                <input type="radio" name="size" value={k} class="sr-only" checked={i === 1} /> {v}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div><label class="label" for="f-from">{d.from} *</label><input class="field" id="f-from" name="from" type="date" data-required /></div>
+          <div><label class="label" for="f-to">{d.to} *</label><input class="field" id="f-to" name="to" type="date" data-required /></div>
+          <div><label class="label" for="f-drop">{d.dropoff}</label><input class="field" id="f-drop" name="dropoff" type="time" /></div>
+          <div><label class="label" for="f-pick">{d.pickup}</label><input class="field" id="f-pick" name="pickup" type="time" /></div>
+        </div>
+        <div>
+          <label class="label" for="f-temp">{d.temperament}</label>
+          <select class="field" id="f-temp" name="temperament">
+            {Object.entries(d.temperaments).map(([k, v]) => <option value={k}>{v}</option>)}
+          </select>
+        </div>
+        <div><label class="label" for="f-needs">{d.needs}</label><textarea class="field" id="f-needs" name="needs" rows="2" maxlength="1000"></textarea></div>
+        <label class="flex items-start gap-2"><input type="checkbox" name="vaccinated" class="mt-1 size-5 accent-coral" data-required /> {d.vaccinated} *</label>
+      </div>
+
+      <div><label class="label" for="f-msg">{d.message}</label><textarea class="field" id="f-msg" name="message" rows="3" maxlength="2000"></textarea></div>
+
+      <label class="flex items-start gap-2 text-sm">
+        <input type="checkbox" name="consent" required class="mt-0.5 size-5 accent-coral" />
+        <span>{d.consent} <a class="font-bold text-coral underline" href={`/${lang}/privacy/`}>{d.privacyLink}</a> *</span>
+      </label>
+
+      <div class="cf-turnstile" data-sitekey={siteKey} data-language={lang} data-size="flexible"></div>
+      <p class="form-error hidden rounded-xl bg-coral/15 p-3 text-sm font-bold" role="alert">{d.errorText} <a class="underline" href={`mailto:${business.email}`}>{business.email}</a></p>
+
+      <button type="submit" class="btn-bone btn-primary w-[calc(100%-1.2rem)] justify-center text-lg">
+        <span class="submit-label">🐾 {d.submit}</span>
+        <span class="submit-busy hidden items-center gap-3"><span class="tail-spinner !bg-white"></span>{d.sending}</span>
+      </button>
+    </form>
+
+    <div id="request-success" class="hidden py-10 text-center" role="status">
+      <div class="text-7xl">🐶</div>
+      <h3 class="mt-4 text-3xl font-semibold">{d.successTitle}</h3>
+      <p class="mt-3 text-lg text-muted">{d.successText}</p>
+      <button type="button" class="request-again btn-bone btn-secondary mt-6">{d.another}</button>
+    </div>
+  </div>
+</section>
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+  const form = document.getElementById('request-form') as HTMLFormElement;
+  const success = document.getElementById('request-success')!;
+  const errorBox = form.querySelector<HTMLElement>('.form-error')!;
+  const requiredMsg = form.dataset.requiredMsg!;
+
+  function currentType() {
+    return (form.elements.namedItem('type') as RadioNodeList).value as 'lesson' | 'pet';
+  }
+  function syncType() {
+    const type = currentType();
+    form.querySelectorAll<HTMLElement>('[data-for]').forEach((s) => {
+      const active = s.dataset.for === type;
+      s.classList.toggle('hidden', !active);
+      s.querySelectorAll<HTMLInputElement>('[data-required]').forEach((i) => (i.required = active));
+    });
+  }
+  function setType(type: string) {
+    const radio = form.querySelector<HTMLInputElement>(`input[name=type][value=${type}]`);
+    if (radio) { radio.checked = true; syncType(); }
+  }
+  form.querySelectorAll('input[name=type]').forEach((r) => r.addEventListener('change', syncType));
+  syncType();
+
+  // Prefill from other parts of the page
+  window.addEventListener('request:type', (e) => setType((e as CustomEvent).detail));
+  window.addEventListener('request:level', (e) => {
+    setType('lesson');
+    (form.elements.namedItem('level') as HTMLSelectElement).value = (e as CustomEvent).detail;
+  });
+  window.addEventListener('request:slot', (e) => {
+    setType('lesson');
+    const slots = form.elements.namedItem('slots') as HTMLTextAreaElement;
+    const text = (e as CustomEvent).detail as string;
+    if (!slots.value.includes(text)) slots.value = slots.value ? `${slots.value}\n${text}` : text;
+  });
+  window.addEventListener('request:dates', (e) => {
+    setType('pet');
+    const { from, to } = (e as CustomEvent).detail;
+    (form.elements.namedItem('from') as HTMLInputElement).value = from;
+    (form.elements.namedItem('to') as HTMLInputElement).value = to;
+  });
+
+  form.querySelectorAll<HTMLInputElement>('input, textarea, select').forEach((i) => {
+    i.addEventListener('invalid', () => i.setCustomValidity(i.validity.valueMissing ? requiredMsg : ''));
+    i.addEventListener('input', () => i.setCustomValidity(''));
+  });
+
+  function busy(on: boolean) {
+    form.querySelector('.submit-label')!.classList.toggle('hidden', on);
+    const b = form.querySelector('.submit-busy')!;
+    b.classList.toggle('hidden', !on);
+    b.classList.toggle('inline-flex', on);
+    form.querySelector<HTMLButtonElement>('button[type=submit]')!.disabled = on;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBox.classList.add('hidden');
+    if (!form.reportValidity()) return;
+    const data = Object.fromEntries(new FormData(form).entries());
+    // Only send the fields for the chosen request type
+    const hidden = form.querySelector<HTMLElement>(`[data-for]:not([data-for=${currentType()}])`);
+    hidden?.querySelectorAll<HTMLInputElement>('[name]').forEach((i) => delete data[i.name]);
+    busy(true);
+    try {
+      const res = await fetch('/api/request', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      form.classList.add('hidden');
+      success.classList.remove('hidden');
+      window.dispatchEvent(new CustomEvent('dogs:celebrate'));
+    } catch {
+      errorBox.classList.remove('hidden');
+    } finally {
+      busy(false);
+      (window as any).turnstile?.reset();
+    }
+  });
+
+  success.querySelector('.request-again')!.addEventListener('click', () => {
+    form.reset();
+    syncType();
+    success.classList.add('hidden');
+    form.classList.remove('hidden');
+  });
+</script>

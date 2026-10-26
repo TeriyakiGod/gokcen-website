@@ -1,0 +1,26 @@
+---
+// Picks the visitor's language: remembered choice, then browser language, then English.
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gökçen — English Lessons & Dog Sitting</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      (function () {
+        var supported = ['en', 'pl', 'tr'];
+        var saved = null;
+        try { saved = localStorage.getItem('lang'); } catch (e) {}
+        var browser = (navigator.languages || [navigator.language]).map(function (l) { return l.slice(0, 2).toLowerCase(); });
+        var lang = supported.indexOf(saved) >= 0 ? saved : browser.filter(function (l) { return supported.indexOf(l) >= 0; })[0] || 'en';
+        location.replace('/' + lang + '/' + location.hash);
+      })();
+    </script>
+    <noscript><meta http-equiv="refresh" content="0; url=/en/" /></noscript>
+  </head>
+  <body style="background:#fff8ec;font-family:system-ui;text-align:center;padding-top:20vh">
+    <p>🐾 <a href="/en/">English</a> · <a href="/pl/">Polski</a> · <a href="/tr/">Türkçe</a></p>
+  </body>
+</html>

@@ -1,0 +1,212 @@
+@import 'tailwindcss';
+@import '@fontsource/fredoka/500.css';
+@import '@fontsource/fredoka/600.css';
+@import '@fontsource/nunito/400.css';
+@import '@fontsource/nunito/700.css';
+@import '@fontsource/nunito/400-italic.css';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme {
+  --font-display: 'Fredoka', ui-rounded, system-ui, sans-serif;
+  --font-sans: 'Nunito', system-ui, sans-serif;
+
+  --color-cream: var(--c-cream);
+  --color-paper: var(--c-paper);
+  --color-ink: var(--c-ink);
+  --color-muted: var(--c-muted);
+  --color-ball: var(--c-ball);
+  --color-coral: var(--c-coral);
+  --color-coral-dark: var(--c-coral-dark);
+  --color-mint: var(--c-mint);
+  --color-sky: var(--c-sky);
+  --color-line: var(--c-line);
+  --color-busy: var(--c-busy);
+}
+
+:root {
+  --c-cream: #fff8ec;
+  --c-paper: #ffffff;
+  --c-ink: #1d1b2e;
+  --c-muted: #5d5a6e;
+  --c-ball: #e9f05a;
+  --c-coral: #ff7a5c;
+  --c-coral-dark: #d9542f;
+  --c-mint: #bfe6d0;
+  --c-sky: #cfe0ff;
+  --c-line: #ece3d2;
+  --c-busy: #e7e1d7;
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --c-cream: #17162a;
+  --c-paper: #221f38;
+  --c-ink: #f6f1e7;
+  --c-muted: #b7b2c8;
+  --c-ball: #dbe34b;
+  --c-coral: #ff8c70;
+  --c-coral-dark: #ffae99;
+  --c-mint: #2e5a46;
+  --c-sky: #2d3b63;
+  --c-line: #363252;
+  --c-busy: #3a3654;
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+body {
+  background: var(--c-cream);
+  color: var(--c-ink);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .font-display { font-family: var(--font-display); }
+
+@layer components {
+/* Notebook paper lines for "lesson" sections */
+.notebook, .card.notebook {
+  background-image:
+    linear-gradient(90deg, transparent 2.9rem, color-mix(in oklab, var(--c-coral) 45%, transparent) 2.9rem, color-mix(in oklab, var(--c-coral) 45%, transparent) 3rem, transparent 3rem),
+    repeating-linear-gradient(to bottom, transparent 0 1.95rem, color-mix(in oklab, var(--c-sky) 80%, transparent) 1.95rem 2rem);
+}
+
+/* Grammar-tag label above section titles */
+.grammar-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--c-muted);
+  padding: 0.15rem 0.75rem;
+  border: 1.5px dashed var(--c-line);
+  border-radius: 999px;
+}
+
+.card {
+  background: var(--c-paper);
+  border: 1px solid var(--c-line);
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px -18px rgb(29 27 46 / 0.35);
+}
+
+/* Bone-shaped primary button */
+.btn-bone {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.6rem;
+  border-radius: 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-bone::before, .btn-bone::after {
+  content: '';
+  position: absolute;
+  top: 0.05rem;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  background: var(--bone);
+  box-shadow: 0 1.55rem 0 0 var(--bone);
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.btn-bone::before { left: -0.55rem; }
+.btn-bone::after { right: -0.55rem; }
+.btn-bone:hover { transform: translateY(-2px) rotate(-1deg); }
+.btn-bone:active { transform: translateY(0) scale(0.98); }
+.btn-bone { background: var(--bone); min-height: 3rem; margin-inline: 0.6rem; }
+.btn-primary { --bone: var(--c-coral); color: #fff; }
+.btn-primary:hover { --bone: #e8603f; }
+.btn-secondary { --bone: var(--c-ball); color: #1d1b2e; }
+.btn-secondary:hover { --bone: #d9e04a; }
+
+.paw-divider {
+  height: 2.5rem;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='40' viewBox='0 0 80 40'%3E%3Cg fill='%23ff7a5c' opacity='.35'%3E%3Cellipse cx='20' cy='26' rx='6' ry='5'/%3E%3Ccircle cx='14' cy='18' r='2.4'/%3E%3Ccircle cx='18' cy='15' r='2.4'/%3E%3Ccircle cx='23' cy='15' r='2.4'/%3E%3Ccircle cx='27' cy='18' r='2.4'/%3E%3Cellipse cx='58' cy='16' rx='6' ry='5'/%3E%3Ccircle cx='52' cy='8' r='2.4'/%3E%3Ccircle cx='56' cy='5' r='2.4'/%3E%3Ccircle cx='61' cy='5' r='2.4'/%3E%3Ccircle cx='65' cy='8' r='2.4'/%3E%3C/g%3E%3C/svg%3E") repeat-x center;
+}
+
+/* Speech bubble */
+.bubble {
+  position: relative;
+  background: var(--c-paper);
+  border: 2px solid var(--c-ink);
+  border-radius: 1.25rem;
+  padding: 0.6rem 0.9rem;
+}
+.bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 1.5rem;
+  width: 16px;
+  height: 16px;
+  background: var(--c-paper);
+  border-right: 2px solid var(--c-ink);
+  border-bottom: 2px solid var(--c-ink);
+  transform: rotate(45deg);
+}
+
+.field {
+  width: 100%;
+  border: 1.5px solid var(--c-line);
+  background: var(--c-cream);
+  border-radius: 0.9rem;
+  padding: 0.7rem 0.9rem;
+  color: var(--c-ink);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field:focus { outline: none; border-color: var(--c-coral); box-shadow: 0 0 0 4px color-mix(in oklab, var(--c-coral) 25%, transparent); }
+.label { display: block; font-weight: 700; font-size: 0.92rem; margin-bottom: 0.35rem; }
+
+:focus-visible { outline: 3px solid var(--c-coral); outline-offset: 3px; border-radius: 6px; }
+
+/* Wagging tail spinner */
+.tail-spinner {
+  width: 2.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--c-coral);
+  transform-origin: left center;
+  animation: wag 0.35s ease-in-out infinite alternate;
+}
+@keyframes wag { from { transform: rotate(-25deg); } to { transform: rotate(25deg); } }
+
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.animate-float { animation: float 4s ease-in-out infinite; }
+
+.paw-print {
+  position: fixed;
+  pointer-events: none;
+  z-index: 60;
+  width: 18px;
+  height: 18px;
+  opacity: 0.55;
+  animation: paw-fade 1.2s forwards;
+}
+@keyframes paw-fade { to { opacity: 0; transform: scale(0.6); } }
+
+}
+
+/* Dog canvas sits above content but lets clicks through except where a dog is */
+#dog-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 40;
+  pointer-events: none;
+}

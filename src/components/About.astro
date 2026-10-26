@@ -1,0 +1,30 @@
+---
+import { t, type Lang } from '../i18n';
+import { aboutPhoto } from '../data/gallery';
+import Photo from './Photo.astro';
+import SectionTitle from './SectionTitle.astro';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang).about;
+---
+<section id="about" class="mx-auto max-w-6xl px-4 py-20">
+  <div class="grid items-center gap-12 md:grid-cols-[1fr_1.3fr]">
+    <div class="relative mx-auto w-full max-w-sm">
+      <div class="absolute inset-0 -rotate-6 rounded-[2rem] bg-sky"></div>
+      <Photo photo={aboutPhoto} lang={lang} class="relative aspect-square rounded-[2rem] border-8 border-paper shadow-xl" />
+    </div>
+    <div>
+      <SectionTitle tag={d.tag} title={d.title} center={false} />
+      <p class="text-lg leading-relaxed">{d.p1}</p>
+      <p class="mt-4 text-lg leading-relaxed">{d.p2}</p>
+      <dl class="mt-8 grid grid-cols-3 gap-3">
+        {d.facts.map((f) => (
+          <div class="card p-4 text-center">
+            <dt class="text-xs font-bold text-muted sm:text-sm">{f.label}</dt>
+            <dd class="order-first font-display text-3xl font-semibold text-coral">{f.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,22 @@
+---
+import type { Photo } from '../data/gallery';
+import { t, type Lang } from '../i18n';
+interface Props { photo: Photo; lang: Lang; class?: string; eager?: boolean }
+const { photo, lang, class: cls = '', eager = false } = Astro.props;
+---
+<figure class:list={['relative overflow-hidden', cls]}>
+  <img
+    src={photo.src}
+    alt={photo.alt[lang]}
+    width={photo.width}
+    height={photo.height}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    class="h-full w-full object-cover"
+  />
+  {photo.placeholder && (
+    <figcaption class="absolute bottom-3 left-3 rounded-full bg-paper/90 px-3 py-1 text-xs font-bold text-muted">
+      📷 {t(lang).fun.photoSoon}
+    </figcaption>
+  )}
+</figure>

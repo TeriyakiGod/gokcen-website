@@ -1,0 +1,55 @@
+---
+import '../styles/global.css';
+import { t, langs, htmlLang, type Lang } from '../i18n';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  path?: string;
+}
+const { lang, title, path = '' } = Astro.props;
+const d = t(lang);
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+---
+<!doctype html>
+<html lang={htmlLang[lang]}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title ?? d.meta.title}</title>
+    <meta name="description" content={d.meta.description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#ff7a5c" />
+    <meta property="og:title" content={title ?? d.meta.title} />
+    <meta property="og:description" content={d.meta.description} />
+    <meta property="og:image" content={`${site}/photos/hero.svg`} />
+    {langs.map((l) => <link rel="alternate" hreflang={l} href={`${site}/${l}/${path}`} />)}
+    <script is:inline>
+      (function () {
+        try {
+          var s = localStorage.getItem('theme');
+          var dark = s ? s === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        } catch (e) {}
+      })();
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'LocalBusiness',
+      name: 'Gökçen — English Lessons & Dog Sitting',
+      areaServed: 'Gdańsk',
+      address: { '@type': 'PostalAddress', addressLocality: 'Gdańsk', addressRegion: 'pomorskie', addressCountry: 'PL' },
+      description: d.meta.description,
+    })} />
+  </head>
+  <body class="min-h-screen antialiased">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-paper focus:p-3 focus:rounded-lg">Skip to content</a>
+    <Header lang={lang} path={path} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

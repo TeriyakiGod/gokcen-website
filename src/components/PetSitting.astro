@@ -1,0 +1,60 @@
+---
+import { t, type Lang } from '../i18n';
+import { business } from '../config/business';
+import SectionTitle from './SectionTitle.astro';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang).pet;
+const per = { day: d.perDay, night: d.perNight, walk: d.perWalk };
+const { lat, lng } = business.location;
+const mapUrl = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=14/${lat}/${lng}`;
+---
+<section id="pet-sitting" class="mx-auto max-w-6xl px-4 py-20">
+  <SectionTitle tag={d.tag} title={d.title} intro={d.intro} />
+  <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+    {d.included.map((x) => (
+      <article class="card p-6 transition hover:-translate-y-1 hover:rotate-[0.5deg]">
+        <div class="text-4xl" aria-hidden="true">{x.icon}</div>
+        <h3 class="mt-3 text-xl font-semibold">{x.title}</h3>
+        <p class="mt-2 text-muted">{x.text}</p>
+      </article>
+    ))}
+  </div>
+  <div class="mt-14 grid gap-8 lg:grid-cols-2">
+    <div class="card overflow-hidden">
+      <a href={mapUrl} target="_blank" rel="noopener" class="group relative block aspect-[16/9] bg-mint">
+        <svg viewBox="0 0 400 225" class="h-full w-full" aria-hidden="true">
+          <rect width="400" height="225" fill="var(--c-mint)" />
+          <path d="M0 40 C80 60 120 20 200 50 S330 30 400 60 V0 H0Z" fill="#7fbf95" opacity=".55" />
+          <path d="M0 225 C60 180 110 200 150 160 S260 140 400 170 V225Z" fill="#7fbf95" opacity=".4" />
+          <path d="M-10 120 Q120 100 200 125 T410 110" stroke="var(--c-paper)" stroke-width="10" fill="none" />
+          <path d="M210 -10 Q190 100 230 235" stroke="var(--c-paper)" stroke-width="7" fill="none" />
+          <g font-family="Fredoka, sans-serif" font-size="13" fill="var(--c-ink)" opacity=".7">
+            <text x="20" y="30">🌲 Trójmiejski Park Krajobrazowy</text>
+            <text x="300" y="150">Oliwa →</text>
+            <text x="300" y="210">Wrzeszcz ↘</text>
+          </g>
+          <circle cx="200" cy="118" r="44" fill="var(--c-coral)" opacity=".2" />
+          <text x="200" y="128" text-anchor="middle" font-size="30">🏡</text>
+        </svg>
+        <span class="absolute right-3 bottom-3 rounded-full bg-paper px-3 py-1 text-sm font-bold shadow group-hover:text-coral">🗺️ OpenStreetMap ↗</span>
+      </a>
+      <div class="p-6">
+        <h3 class="text-2xl font-semibold">📍 {d.areaTitle}</h3>
+        <p class="mt-2 text-muted">{d.area}</p>
+      </div>
+    </div>
+    <div class="card p-8">
+      <h3 class="text-2xl font-semibold">{d.pricesTitle}</h3>
+      <ul class="mt-4 divide-y divide-line">
+        {business.petSitting.prices.map((p) => (
+          <li class="flex items-baseline justify-between gap-4 py-3">
+            <span class="font-bold">{d.prices[p.key]}</span>
+            <span class="font-display text-xl font-semibold text-coral">{p.amount} {business.currency} <span class="text-sm font-normal text-muted">{per[p.key]}</span></span>
+          </li>
+        ))}
+      </ul>
+      <a href="#request" data-prefill="pet" class="btn-bone btn-secondary mt-6">🐶 {t(lang).hero.ctaPet}</a>
+    </div>
+  </div>
+</section>

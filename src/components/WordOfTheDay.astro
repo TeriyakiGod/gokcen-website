@@ -1,0 +1,34 @@
+---
+import { t, type Lang } from '../i18n';
+import { idioms } from '../data/idioms';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang).wotd;
+---
+<button type="button" id="wotd" class="group block w-full text-left [perspective:1000px]" aria-live="polite" data-lang={lang}>
+  <div class="relative min-h-40 transition-transform duration-500 [transform-style:preserve-3d] group-data-[flipped]:[transform:rotateY(180deg)]">
+    <div class="card absolute inset-0 p-4 [backface-visibility:hidden]">
+      <p class="text-xs font-bold tracking-wider text-coral uppercase">⭐ {d.title}</p>
+      <p class="wotd-phrase mt-2 font-display text-xl leading-snug font-semibold">{idioms[0].phrase}</p>
+      <p class="mt-2 text-xs text-muted">↻ {d.flip}</p>
+    </div>
+    <div class="card absolute inset-0 overflow-auto bg-ball/30 p-4 [backface-visibility:hidden] [transform:rotateY(180deg)]">
+      <p class="wotd-meaning text-sm font-bold">{idioms[0].meaning}</p>
+      <p class="wotd-hint mt-1 text-xs text-muted italic"></p>
+      <p class="mt-2 text-xs"><span class="font-bold">{d.example}:</span> <span class="wotd-example">{idioms[0].example}</span></p>
+    </div>
+  </div>
+</button>
+<script>
+  import { idiomOfTheDay } from '../data/idioms';
+  const el = document.getElementById('wotd');
+  if (el) {
+    const lang = el.dataset.lang as 'en' | 'pl' | 'tr';
+    const idiom = idiomOfTheDay();
+    el.querySelector('.wotd-phrase')!.textContent = idiom.phrase;
+    el.querySelector('.wotd-meaning')!.textContent = idiom.meaning;
+    el.querySelector('.wotd-example')!.textContent = idiom.example;
+    if (lang !== 'en') el.querySelector('.wotd-hint')!.textContent = `≈ ${idiom.hint[lang]}`;
+    el.addEventListener('click', () => el.toggleAttribute('data-flipped'));
+  }
+</script>

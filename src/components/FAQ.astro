@@ -1,0 +1,21 @@
+---
+import { t, type Lang } from '../i18n';
+import SectionTitle from './SectionTitle.astro';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang).faq;
+---
+<section id="faq" class="mx-auto max-w-3xl px-4 py-20">
+  <SectionTitle tag={d.tag} title={d.title} />
+  <div class="space-y-3">
+    {d.items.map((x) => (
+      <details class="card group p-5">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-bold">
+          {x.q}
+          <span class="text-coral transition group-open:rotate-45" aria-hidden="true">＋</span>
+        </summary>
+        <p class="mt-3 text-muted">{x.a}</p>
+      </details>
+    ))}
+  </div>
+</section>

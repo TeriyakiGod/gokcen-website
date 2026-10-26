@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import { langs, t, type Lang } from '../../i18n';
+import { business } from '../../config/business';
+
+export function getStaticPaths() {
+  return langs.map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+const d = t(lang).privacy;
+---
+<Base lang={lang} title={`${d.title} — Gökçen`} path="privacy/">
+  <article class="mx-auto max-w-2xl px-4 py-16">
+    <h1 class="text-4xl font-semibold">{d.title}</h1>
+    <div class="card mt-8 space-y-4 p-8 text-lg leading-relaxed">
+      {d.body.map((p) => <p>{p}</p>)}
+      <p><a class="font-bold text-coral" href={`mailto:${business.email}`}>{business.email}</a></p>
+    </div>
+    <a href={`/${lang}/`} class="btn-bone btn-secondary mt-8">← {d.back}</a>
+  </article>
+</Base>

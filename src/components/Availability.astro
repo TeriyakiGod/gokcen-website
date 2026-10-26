@@ -1,0 +1,51 @@
+---
+import { t, type Lang } from '../i18n';
+import { business } from '../config/business';
+import SectionTitle from './SectionTitle.astro';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang).availability;
+const config = { tz: business.timezone, hours: business.lessons.hours, slotMinutes: business.lessons.slotMinutes };
+---
+<section id="availability" class="bg-paper py-20">
+  <div class="mx-auto max-w-6xl px-4">
+    <SectionTitle tag={d.tag} title={d.title} intro={d.intro} />
+    <div id="avail" class="card bg-cream p-4 sm:p-6" data-labels={JSON.stringify(d)} data-config={JSON.stringify(config)} data-lang={lang}>
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="inline-flex rounded-full bg-paper p-1" role="tablist">
+          <button type="button" role="tab" data-tab="lessons" aria-selected="true" class="av-tab rounded-full px-4 py-2 font-bold aria-selected:bg-coral aria-selected:text-white">📚 {d.tabLessons}</button>
+          <button type="button" role="tab" data-tab="pet" aria-selected="false" class="av-tab rounded-full px-4 py-2 font-bold aria-selected:bg-coral aria-selected:text-white">🐶 {d.tabPet}</button>
+        </div>
+        <label class="av-tz flex items-center gap-2 text-sm font-bold">
+          <select class="field !w-auto !py-1.5">
+            <option value="local">{d.yourTime}</option>
+            <option value="warsaw">{d.warsawTime}</option>
+          </select>
+        </label>
+      </div>
+      <div class="mt-4 flex items-center justify-between gap-2">
+        <button type="button" class="av-prev grid size-10 place-items-center rounded-full border border-line bg-paper text-xl disabled:opacity-30">‹</button>
+        <p class="av-range font-display text-lg font-semibold" aria-live="polite"></p>
+        <button type="button" class="av-next grid size-10 place-items-center rounded-full border border-line bg-paper text-xl disabled:opacity-30">›</button>
+      </div>
+      <div class="av-body mt-4 min-h-64">
+        <div class="flex items-center justify-center gap-3 py-20 text-muted"><span class="tail-spinner"></span>{d.loading}</div>
+      </div>
+      <div class="av-action mt-4 hidden flex-wrap items-center justify-between gap-3 rounded-2xl bg-ball/40 p-3">
+        <p class="av-selected font-bold"></p>
+        <button type="button" class="av-use btn-bone btn-primary !py-2"></button>
+      </div>
+      <div class="mt-4 flex flex-wrap items-center gap-4 text-sm text-muted">
+        <span class="flex items-center gap-1.5"><span class="size-4 rounded bg-mint"></span>{d.free}</span>
+        <span class="av-partly-legend hidden items-center gap-1.5"><span class="size-4 rounded bg-ball/70"></span>{d.partly}</span>
+        <span class="flex items-center gap-1.5"><span class="size-4 rounded bg-busy"></span>{d.busy}</span>
+        <span class="av-updated ml-auto"></span>
+      </div>
+      <p class="av-demo mt-2 hidden text-xs text-muted italic">{d.demo}</p>
+    </div>
+  </div>
+</section>
+<script>
+  import { initAvailability } from '../scripts/availability';
+  initAvailability(document.getElementById('avail')!);
+</script>

@@ -1,0 +1,80 @@
+---
+import { t, type Lang } from '../i18n';
+import { gallery, guests } from '../data/gallery';
+import SectionTitle from './SectionTitle.astro';
+import Photo from './Photo.astro';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang).gallery;
+const filters = [['all', d.all], ['dogs', d.dogs], ['lessons', d.lessons], ['home', d.home]];
+const rot = ['-rotate-2', 'rotate-1', '-rotate-1', 'rotate-2'];
+---
+<section id="gallery" class="mx-auto max-w-6xl px-4 py-20">
+  <SectionTitle tag={d.tag} title={d.title} />
+  <div class="mb-8 flex flex-wrap justify-center gap-2" role="group">
+    {filters.map(([key, label], i) => (
+      <button type="button" data-filter={key} aria-pressed={i === 0 ? 'true' : 'false'} class="gallery-filter rounded-full border border-line px-4 py-1.5 font-bold aria-pressed:border-coral aria-pressed:bg-coral aria-pressed:text-white">{label}</button>
+    ))}
+  </div>
+  <div id="gallery-grid" class="columns-1 gap-4 sm:columns-2 lg:columns-3">
+    {gallery.map((p, i) => (
+      <button type="button" data-cat={p.category} data-index={i} class="gallery-item mb-4 block w-full break-inside-avoid overflow-hidden rounded-3xl transition hover:scale-[1.02]">
+        <Photo photo={p} lang={lang} />
+      </button>
+    ))}
+  </div>
+
+  <h3 class="mt-20 text-center text-3xl font-semibold">🐕 {d.guestsTitle}</h3>
+  <ul class="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-4">
+    {guests.map((g, i) => (
+      <li class:list={['card p-3 pb-4 text-center transition hover:rotate-0', rot[i % rot.length]]}>
+        <img src={g.src} alt={g.name} width="300" height="300" loading="lazy" class="aspect-square w-full rounded-2xl object-cover" />
+        <p class="mt-3 font-display text-xl font-semibold">{g.name}</p>
+        <p class="text-sm text-muted">{d.favouriteWord}: <em class="text-coral">“{g.word}”</em></p>
+      </li>
+    ))}
+  </ul>
+
+  <dialog id="lightbox" class="m-auto max-h-[92vh] max-w-[92vw] overflow-visible bg-transparent p-0 backdrop:bg-black/80">
+    <img class="lb-img max-h-[85vh] max-w-[90vw] rounded-2xl" alt="" />
+    <p class="lb-cap mt-2 text-center text-white"></p>
+    <button type="button" class="lb-close absolute -top-4 -right-4 grid size-10 place-items-center rounded-full bg-paper text-xl" aria-label={d.close}>✕</button>
+    <button type="button" class="lb-prev absolute top-1/2 -left-4 grid size-10 -translate-y-1/2 place-items-center rounded-full bg-paper text-xl" aria-label={d.prev}>‹</button>
+    <button type="button" class="lb-next absolute top-1/2 -right-4 grid size-10 -translate-y-1/2 place-items-center rounded-full bg-paper text-xl" aria-label={d.next}>›</button>
+  </dialog>
+</section>
+<script>
+  const items = [...document.querySelectorAll<HTMLButtonElement>('.gallery-item')];
+  document.querySelectorAll<HTMLButtonElement>('.gallery-filter').forEach((btn, _, all) =>
+    btn.addEventListener('click', () => {
+      all.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      const f = btn.dataset.filter;
+      items.forEach((it) => (it.hidden = f !== 'all' && it.dataset.cat !== f));
+    })
+  );
+  const lb = document.getElementById('lightbox') as HTMLDialogElement;
+  const img = lb.querySelector<HTMLImageElement>('.lb-img')!;
+  const cap = lb.querySelector<HTMLParagraphElement>('.lb-cap')!;
+  let current = 0;
+  const visible = () => items.filter((i) => !i.hidden);
+  function show(btn: HTMLButtonElement) {
+    const src = btn.querySelector('img')!;
+    img.src = src.src;
+    img.alt = src.alt;
+    cap.textContent = src.alt;
+    current = visible().indexOf(btn);
+  }
+  function step(n: number) {
+    const v = visible();
+    show(v[(current + n + v.length) % v.length]);
+  }
+  items.forEach((it) => it.addEventListener('click', () => { show(it); lb.showModal(); }));
+  lb.querySelector('.lb-close')!.addEventListener('click', () => lb.close());
+  lb.querySelector('.lb-prev')!.addEventListener('click', () => step(-1));
+  lb.querySelector('.lb-next')!.addEventListener('click', () => step(1));
+  lb.addEventListener('click', (e) => { if (e.target === lb) lb.close(); });
+  lb.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') step(1);
+  });
+</script>

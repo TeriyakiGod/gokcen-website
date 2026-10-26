@@ -1,0 +1,44 @@
+---
+import { t, type Lang } from '../i18n';
+import { heroPhoto } from '../data/gallery';
+import Photo from './Photo.astro';
+import WordOfTheDay from './WordOfTheDay.astro';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang).hero;
+---
+<section class="relative overflow-hidden">
+  <div class="pointer-events-none absolute -top-24 -right-24 size-96 rounded-full bg-ball/40 blur-3xl"></div>
+  <div class="pointer-events-none absolute -bottom-32 -left-20 size-96 rounded-full bg-coral/20 blur-3xl"></div>
+  <div class="relative mx-auto grid max-w-6xl items-center gap-12 px-4 pt-12 pb-20 md:grid-cols-[1.15fr_1fr] md:pt-20">
+    <div>
+      <span class="inline-flex items-center gap-2 rounded-full bg-mint px-3 py-1 text-sm font-bold">
+        <span class="size-2 animate-pulse rounded-full bg-green-600"></span>{d.badge}
+      </span>
+      <p class="mt-6 font-display text-lg text-muted">
+        <span class="font-semibold text-ink">Gök·çen</span> <span>{d.phonetic}</span> <em class="text-coral">{d.pos}</em>
+      </p>
+      <p class="mt-1 max-w-md border-l-4 border-ball pl-3 italic text-muted">{d.definition}</p>
+      <h1 class="mt-6 text-4xl leading-tight font-semibold sm:text-5xl lg:text-6xl">{d.title}</h1>
+      <p class="mt-5 max-w-xl text-lg text-muted">{d.subtitle}</p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a href="#request" data-prefill="lesson" class="btn-bone btn-primary">📚 {d.ctaLesson}</a>
+        <a href="#request" data-prefill="pet" class="btn-bone btn-secondary">🐶 {d.ctaPet}</a>
+      </div>
+    </div>
+    <div class="relative mx-auto w-full max-w-sm">
+      <div class="animate-float">
+        <Photo photo={heroPhoto} lang={lang} eager class="aspect-[4/5] rounded-[2.5rem] border-8 border-paper shadow-2xl rotate-2" />
+      </div>
+      <div class="absolute -bottom-10 -left-8 w-64 sm:-left-16">
+        <WordOfTheDay lang={lang} />
+      </div>
+      <div class="bubble absolute -top-4 -right-2 rotate-6 font-display text-lg sm:-right-8">Hello! 👋 Cześć! Merhaba!</div>
+    </div>
+  </div>
+</section>
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('[data-prefill]').forEach((a) =>
+    a.addEventListener('click', () => window.dispatchEvent(new CustomEvent('request:type', { detail: a.dataset.prefill })))
+  );
+</script>

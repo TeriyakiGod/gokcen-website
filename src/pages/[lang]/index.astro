@@ -1,0 +1,32 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import About from '../../components/About.astro';
+import Lessons from '../../components/Lessons.astro';
+import PetSitting from '../../components/PetSitting.astro';
+import Availability from '../../components/Availability.astro';
+import Gallery from '../../components/Gallery.astro';
+import Testimonials from '../../components/Testimonials.astro';
+import FAQ from '../../components/FAQ.astro';
+import RequestForm from '../../components/RequestForm.astro';
+import DogPlayground from '../../components/DogPlayground.astro';
+import { langs, type Lang } from '../../i18n';
+
+export function getStaticPaths() {
+  return langs.map((lang) => ({ params: { lang } }));
+}
+const lang = Astro.params.lang as Lang;
+---
+<Base lang={lang}>
+  <Hero lang={lang} />
+  <div class="paw-divider"></div>
+  <About lang={lang} />
+  <Lessons lang={lang} />
+  <PetSitting lang={lang} />
+  <Availability lang={lang} />
+  <Gallery lang={lang} />
+  <Testimonials lang={lang} />
+  <FAQ lang={lang} />
+  <RequestForm lang={lang} />
+  <DogPlayground lang={lang} />
+</Base>

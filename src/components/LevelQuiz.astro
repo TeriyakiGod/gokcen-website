@@ -1,0 +1,73 @@
+---
+import { t, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang).quiz;
+---
+<div id="level-quiz" class="card bg-sky/40 p-6 sm:p-8" data-labels={JSON.stringify(d)}>
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <h3 class="text-2xl font-semibold">🧠 {d.title}</h3>
+      <p class="mt-1 text-muted">{d.intro}</p>
+    </div>
+    <button type="button" class="quiz-start btn-bone btn-primary">{d.start}</button>
+  </div>
+  <div class="quiz-body mt-6 hidden" aria-live="polite"></div>
+</div>
+<script>
+  import { quiz, scoreToLevel } from '../data/quiz';
+  const root = document.getElementById('level-quiz')!;
+  const labels = JSON.parse(root.dataset.labels!);
+  const body = root.querySelector<HTMLDivElement>('.quiz-body')!;
+  const startBtn = root.querySelector<HTMLButtonElement>('.quiz-start')!;
+  let i = 0, score = 0;
+
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls: string, text?: string) {
+    const e = document.createElement(tag);
+    e.className = cls;
+    if (text) e.textContent = text;
+    return e;
+  }
+
+  function render() {
+    body.replaceChildren();
+    if (i >= quiz.length) {
+      const level = scoreToLevel(score);
+      body.append(el('p', 'text-lg', labels.result), el('p', 'font-display text-5xl font-semibold text-coral', level));
+      const row = el('div', 'mt-4 flex flex-wrap gap-3');
+      const use = el('button', 'btn-bone btn-secondary', labels.use);
+      use.type = 'button';
+      use.onclick = () => {
+        window.dispatchEvent(new CustomEvent('request:level', { detail: level }));
+        document.getElementById('request')?.scrollIntoView();
+      };
+      const retry = el('button', 'rounded-full border border-line px-4 py-2 font-bold', labels.retry);
+      retry.type = 'button';
+      retry.onclick = () => { i = 0; score = 0; render(); };
+      row.append(use, retry);
+      body.append(row);
+      return;
+    }
+    const q = quiz[i];
+    body.append(el('p', 'text-sm font-bold text-muted', `${labels.question} ${i + 1} ${labels.of} ${quiz.length}`));
+    const bar = el('div', 'mt-2 h-2 overflow-hidden rounded-full bg-paper');
+    const fill = el('div', 'h-full bg-coral transition-all');
+    fill.style.width = `${(i / quiz.length) * 100}%`;
+    bar.append(fill);
+    body.append(bar, el('p', 'mt-4 font-display text-2xl', q.q));
+    const opts = el('div', 'mt-4 grid gap-3 sm:grid-cols-3');
+    q.options.forEach((o, n) => {
+      const b = el('button', 'card px-4 py-3 text-left font-bold hover:border-coral', o);
+      b.type = 'button';
+      b.onclick = () => { if (n === q.answer) score++; i++; render(); };
+      opts.append(b);
+    });
+    body.append(opts);
+  }
+
+  startBtn.addEventListener('click', () => {
+    body.classList.remove('hidden');
+    startBtn.classList.add('hidden');
+    render();
+  });
+</script>

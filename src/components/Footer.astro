@@ -1,0 +1,30 @@
+---
+import { t, type Lang } from '../i18n';
+import { business } from '../config/business';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang);
+---
+<footer class="mt-24 border-t border-line bg-paper">
+  <div class="paw-divider -mt-5"></div>
+  <div class="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-3">
+    <div>
+      <p class="font-display text-2xl font-semibold">Gökçen 🐾</p>
+      <p class="mt-2 text-muted">{d.footer.tagline}</p>
+    </div>
+    <div>
+      <p class="font-display text-lg font-semibold">{d.footer.contact}</p>
+      <ul class="mt-2 space-y-1 text-muted">
+        <li><a class="hover:text-coral" href={`mailto:${business.email}`}>✉️ {business.email}</a></li>
+        <li><a class="hover:text-coral" href={`https://wa.me/${business.whatsapp.replace(/\D/g, '')}`} rel="noopener">💬 WhatsApp</a></li>
+        <li><a class="hover:text-coral" href={business.instagram} rel="noopener">📷 Instagram</a></li>
+        <li>📍 {business.location.district}, {business.location.city}</li>
+      </ul>
+    </div>
+    <div class="text-sm text-muted sm:text-right">
+      <a class="font-bold hover:text-coral" href={`/${lang}/privacy/`}>{d.footer.privacy}</a>
+      <p class="mt-2">© {new Date().getFullYear()} Gökçen. {d.footer.rights}</p>
+      <p class="mt-1 italic">{d.footer.madeWith}</p>
+    </div>
+  </div>
+</footer>
