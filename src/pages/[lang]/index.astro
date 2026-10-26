@@ -12,6 +12,7 @@ import FAQ from '../../components/FAQ.astro';
 import RequestForm from '../../components/RequestForm.astro';
 import DogPlayground from '../../components/DogPlayground.astro';
 import { langs, type Lang } from '../../i18n';
+import { business } from '../../config/business';
 
 export function getStaticPaths() {
   return langs.map((lang) => ({ params: { lang } }));
@@ -27,7 +28,7 @@ const lang = Astro.params.lang as Lang;
   <Monti lang={lang} />
   <Availability lang={lang} />
   <Gallery lang={lang} />
-  <Testimonials lang={lang} />
+  {business.showReviews && <Testimonials lang={lang} />}
   <FAQ lang={lang} />
   <RequestForm lang={lang} />
   <DogPlayground lang={lang} />

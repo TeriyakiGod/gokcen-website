@@ -2,14 +2,16 @@ name = "gokcen-website"
 main = "worker/index.ts"
 compatibility_date = "2026-10-01"
 
+routes = [{ pattern = "gokcen.kacperochnik.eu", custom_domain = true }]
+
 [assets]
 directory = "./dist"
 binding = "ASSETS"
 not_found_handling = "404-page"
 run_worker_first = ["/api/*"]
 
-# Cloudflare Email Service. Requests go to OWNER_EMAIL, which must be a verified
-# destination address (free on every plan). The sender domain must be onboarded.
+# Cloudflare Email Service (Email Sending, Workers Paid). Sending is enabled for the
+# gokcen.kacperochnik.eu subdomain only, so kacperochnik.eu's own mail is untouched.
 [[send_email]]
 name = "EMAIL"
 
@@ -17,8 +19,8 @@ name = "EMAIL"
 LESSONS_CALENDAR_ID = ""
 PETSITTING_CALENDAR_ID = ""
 OWNER_EMAIL = "gokcenakdag51@gmail.com"
-FROM_EMAIL = ""
+FROM_EMAIL = "hello@gokcen.kacperochnik.eu"
 # "true" also emails a confirmation to the client. Needs the Workers Paid plan.
-SEND_CONFIRMATIONS = "false"
+SEND_CONFIRMATIONS = "true"
 # Secrets (set with `wrangler secret put NAME`):
 #   GOOGLE_SERVICE_ACCOUNT_JSON, TURNSTILE_SECRET_KEY

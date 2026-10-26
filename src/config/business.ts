@@ -41,6 +41,8 @@ export const business = {
     ],
   },
   currency: 'PLN',
+  // Reviews stay hidden until they are real ones from real clients.
+  showReviews: false,
 } as const;
 
 export type Business = typeof business;

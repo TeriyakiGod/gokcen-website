@@ -4,7 +4,7 @@
     {
       "name": "site",
       "runtimeExecutable": "bash",
-      "runtimeArgs": ["-c", "npm run build && wrangler dev --port 8788 --ip 127.0.0.1"],
+      "runtimeArgs": ["-c", "PUBLIC_TURNSTILE_SITE_KEY=1x00000000000000000000AA npm run build && wrangler dev --port 8788 --ip 127.0.0.1"],
       "port": 8788
     }
   ]

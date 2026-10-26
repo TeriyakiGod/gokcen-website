@@ -121,9 +121,9 @@ export async function handleRequest(request: Request, env: Env) {
   const ownerHtml = `<div style="font-family:system-ui,sans-serif"><h2 style="color:#ff7a5c">${esc(subject)}</h2><table style="border-collapse:collapse">${rows}</table><p style="color:#5d5a6e">Reply to this email to answer ${esc(name)} directly.</p></div>`;
 
   if (!env.EMAIL || !env.OWNER_EMAIL || !env.FROM_EMAIL) {
-    // Not configured yet (local dev): log instead of sending.
-    console.log('[request] email not configured; would send:', subject, fields);
-    return json({ ok: true, dev: true });
+    // Never pretend a request was sent: the form then shows the email-me fallback.
+    console.error('[request] email not configured; request not sent:', subject);
+    return json({ error: 'email_not_configured' }, { status: 503 });
   }
 
   try {
