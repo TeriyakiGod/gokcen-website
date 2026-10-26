@@ -9,13 +9,13 @@ const groups = [['students', d.students, '📚'], ['owners', d.owners, '🐶']] 
 <section class="bg-paper py-20">
   <div class="mx-auto max-w-6xl px-4">
     <SectionTitle tag={d.tag} title={d.title} />
-    <div class="grid gap-10 lg:grid-cols-2">
+    <div class="space-y-10">
       {groups.map(([key, label, icon]) => (
         <div>
           <h3 class="mb-4 text-xl font-semibold">{icon} {label}</h3>
           <div class="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 [scrollbar-width:thin]">
             {d.items[key].map((x) => (
-              <figure class="card w-[85%] shrink-0 snap-start p-6 sm:w-[70%]">
+              <figure class="card w-[85%] shrink-0 snap-start p-6 sm:w-[calc(50%-0.5rem)] lg:w-[calc((100%-2rem)/3)]">
                 <p class="text-2xl text-coral" aria-hidden="true">★★★★★</p>
                 <blockquote class="mt-2 text-lg">“{x.text}”</blockquote>
                 <figcaption class="mt-3 font-bold text-muted">— {x.name}</figcaption>
