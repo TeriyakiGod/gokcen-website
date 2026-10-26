@@ -1,0 +1,63 @@
+---
+import { t, type Lang } from '../i18n';
+import { montiPhotos } from '../data/gallery';
+import Photo from './Photo.astro';
+import SectionTitle from './SectionTitle.astro';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang).monti;
+const [main, ...small] = montiPhotos;
+---
+<section id="monti" class="relative overflow-hidden bg-mint/40 py-20">
+  <div class="pointer-events-none absolute -top-20 -left-20 size-80 rounded-full bg-ball/30 blur-3xl"></div>
+  <div class="relative mx-auto grid max-w-6xl items-center gap-12 px-4 md:grid-cols-[1fr_1.2fr]">
+    <div class="relative mx-auto w-full max-w-sm">
+      <Photo photo={main} lang={lang} class="aspect-[4/5] -rotate-2 rounded-[2.5rem] border-8 border-paper shadow-2xl" />
+      <div class="relative -mt-14 flex justify-end gap-3 pr-2 sm:-mr-10">
+        {small.map((p, i) => (
+          <Photo photo={p} lang={lang} hideLabel class:list={['aspect-square w-32 rounded-2xl border-4 border-paper shadow-xl sm:w-36', i ? '-rotate-3' : 'rotate-3']} />
+        ))}
+      </div>
+      <p id="monti-bubble" class="bubble absolute -top-6 left-4 hidden font-display text-lg" role="status"></p>
+    </div>
+    <div>
+      <SectionTitle tag={d.tag} title={d.title} center={false} />
+      <p class="font-display text-lg text-muted">
+        <span class="font-semibold text-ink">Mon·ti</span> {d.phonetic} <em class="text-coral">{d.pos}</em>
+      </p>
+      <p class="mt-1 mb-6 border-l-4 border-ball pl-3 italic text-muted">{d.definition}</p>
+      <p class="text-lg leading-relaxed">{d.p1}</p>
+      <p class="mt-4 text-lg leading-relaxed">{d.p2}</p>
+      <p class="mt-4 text-lg leading-relaxed">{d.p3}</p>
+
+      <div class="card mt-8 p-6">
+        <h3 class="text-xl font-semibold">🪪 {d.factsTitle}</h3>
+        <dl class="mt-4 grid gap-4 sm:grid-cols-2">
+          {d.facts.map((f) => (
+            <div class="flex gap-3">
+              <span class="text-2xl" aria-hidden="true">{f.icon}</span>
+              <div>
+                <dt class="text-xs font-bold tracking-wider text-muted uppercase">{f.label}</dt>
+                <dd class="font-bold">{f.value}</dd>
+              </div>
+            </div>
+          ))}
+        </dl>
+      </div>
+      <p class="mt-6 rounded-2xl bg-paper/70 p-4 text-muted">🤝 {d.meetNote}</p>
+      <button type="button" id="monti-hi" class="btn-bone btn-secondary mt-6" data-reply={d.hiReply}>👋 {d.sayHi}</button>
+    </div>
+  </div>
+</section>
+<script>
+  const btn = document.getElementById('monti-hi')!;
+  const bubble = document.getElementById('monti-bubble')!;
+  let timer = 0;
+  btn.addEventListener('click', () => {
+    bubble.textContent = btn.dataset.reply!;
+    bubble.classList.remove('hidden');
+    clearTimeout(timer);
+    timer = window.setTimeout(() => bubble.classList.add('hidden'), 2500);
+    window.dispatchEvent(new CustomEvent('dogs:celebrate'));
+  });
+</script>

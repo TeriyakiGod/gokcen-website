@@ -56,3 +56,10 @@ export const guests: Guest[] = [
   { name: 'Biscuit', src: '/photos/guest-biscuit.svg', word: 'ball', placeholder: true },
   { name: 'Maks', src: '/photos/guest-maks.svg', word: 'cuddle', placeholder: true },
 ];
+
+// Monti, our own dog. First photo is the big one.
+export const montiPhotos: Photo[] = [
+  { src: '/photos/monti-1.svg', category: 'dogs', ...tall, placeholder: true, alt: { en: 'Monti on a forest walk', pl: 'Monti na leśnym spacerze', tr: 'Orman yürüyüşünde Monti' } },
+  { src: '/photos/monti-2.svg', category: 'dogs', ...square, placeholder: true, alt: { en: 'Monti’s portrait', pl: 'Portret Montiego', tr: 'Monti’nin portresi' } },
+  { src: '/photos/monti-3.svg', category: 'dogs', ...square, placeholder: true, alt: { en: 'Monti “helping” with an English lesson', pl: 'Monti „pomaga” na lekcji angielskiego', tr: 'Monti İngilizce dersine “yardım ediyor”' } },
+];
