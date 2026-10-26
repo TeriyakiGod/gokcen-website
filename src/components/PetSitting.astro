@@ -7,7 +7,7 @@ const { lang } = Astro.props;
 const d = t(lang).pet;
 const per = { day: d.perDay, night: d.perNight, walk: d.perWalk };
 const { lat, lng } = business.location;
-const mapUrl = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=14/${lat}/${lng}`;
+const mapUrl = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=16/${lat}/${lng}`;
 ---
 <section id="pet-sitting" class="mx-auto max-w-6xl px-4 py-20">
   <SectionTitle tag={d.tag} title={d.title} intro={d.intro} />

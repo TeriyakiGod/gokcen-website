@@ -3,27 +3,26 @@
 
 export const business = {
   name: 'Gökçen',
-  // TODO: real contact details
-  email: 'hello@example.com',
-  whatsapp: '+48000000000',
-  instagram: 'https://instagram.com/',
+  email: 'gokcenakdag51@gmail.com',
+  phone: '+48 883 512 271',
+  whatsapp: '+48883512271',
+  instagram: 'https://www.instagram.com/gokcen.akdg/',
   location: {
     district: 'VII Dwór',
     city: 'Gdańsk',
-    // District centre only — never the exact address.
-    lat: 54.4105,
-    lng: 18.5745,
+    // Map pin: the Lewiatan shop on ul. Norblina — near home, never the exact address.
+    lat: 54.3878,
+    lng: 18.5708,
   },
   timezone: 'Europe/Warsaw',
   lessons: {
     // Working hours in Warsaw time, per weekday (0 = Sunday).
     hours: {
-      1: [9, 20],
-      2: [9, 20],
-      3: [9, 20],
-      4: [9, 20],
-      5: [9, 18],
-      6: [10, 14],
+      1: [7, 18],
+      2: [7, 18],
+      3: [7, 18],
+      4: [7, 18],
+      5: [7, 18],
     } as Record<number, [number, number]>,
     slotMinutes: 60,
     // TODO: real prices

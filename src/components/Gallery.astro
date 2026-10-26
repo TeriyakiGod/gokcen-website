@@ -1,12 +1,14 @@
 ---
 import { t, type Lang } from '../i18n';
-import { gallery, guests } from '../data/gallery';
+import { gallery, guests as allGuests } from '../data/gallery';
 import SectionTitle from './SectionTitle.astro';
 import Photo from './Photo.astro';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const d = t(lang).gallery;
-const filters = [['all', d.all], ['dogs', d.dogs], ['lessons', d.lessons], ['home', d.home]];
+const filters = [['all', d.all], ['dogs', d.dogs], ['walks', d.walks], ['lessons', d.lessons], ['home', d.home]]
+  .filter(([key]) => key === 'all' || gallery.some((p) => p.category === key));
+const guests = allGuests.filter((g) => g.ownerOk);
 const rot = ['-rotate-2', 'rotate-1', '-rotate-1', 'rotate-2'];
 ---
 <section id="gallery" class="mx-auto max-w-6xl px-4 py-20">
@@ -25,12 +27,12 @@ const rot = ['-rotate-2', 'rotate-1', '-rotate-1', 'rotate-2'];
   </div>
 
   <h3 class="mt-20 text-center text-3xl font-semibold">🐕 {d.guestsTitle}</h3>
-  <ul class="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-4">
+  <ul class="mt-8 flex flex-wrap justify-center gap-6">
     {guests.map((g, i) => (
-      <li class:list={['card p-3 pb-4 text-center transition hover:rotate-0', rot[i % rot.length]]}>
-        <img src={g.src} alt={g.name} width="300" height="300" loading="lazy" class="aspect-square w-full rounded-2xl object-cover" />
+      <li class:list={['card w-[calc(50%-0.75rem)] p-3 pb-4 text-center transition hover:rotate-0 sm:w-56', rot[i % rot.length]]}>
+        <img src={g.src} alt={g.name} width="300" height="300" loading="lazy" class="aspect-square w-full rounded-2xl object-cover" style={g.position ? `object-position: ${g.position}` : undefined} />
         <p class="mt-3 font-display text-xl font-semibold">{g.name}</p>
-        <p class="text-sm text-muted">{d.favouriteWord}: <em class="text-coral">“{g.word}”</em></p>
+        {g.word && <p class="text-sm text-muted">{d.favouriteWord}: <em class="text-coral">{g.word}</em></p>}
       </li>
     ))}
   </ul>

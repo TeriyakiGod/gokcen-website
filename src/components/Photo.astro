@@ -13,6 +13,7 @@ const { photo, lang, class: cls = '', eager = false, hideLabel = false } = Astro
     loading={eager ? 'eager' : 'lazy'}
     decoding="async"
     class="h-full w-full object-cover"
+    style={photo.position ? `object-position: ${photo.position}` : undefined}
   />
   {photo.placeholder && !hideLabel && (
     <figcaption class="absolute bottom-3 left-3 rounded-full bg-paper/90 px-3 py-1 text-xs font-bold text-muted">

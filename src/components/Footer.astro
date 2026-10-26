@@ -16,6 +16,7 @@ const d = t(lang);
       <p class="font-display text-lg font-semibold">{d.footer.contact}</p>
       <ul class="mt-2 space-y-1 text-muted">
         <li><a class="hover:text-coral" href={`mailto:${business.email}`}>✉️ {business.email}</a></li>
+        <li><a class="hover:text-coral" href={`tel:${business.whatsapp}`}>📞 {business.phone}</a></li>
         <li><a class="hover:text-coral" href={`https://wa.me/${business.whatsapp.replace(/\D/g, '')}`} rel="noopener">💬 WhatsApp</a></li>
         <li><a class="hover:text-coral" href={business.instagram} rel="noopener">📷 Instagram</a></li>
         <li>📍 {business.location.district}, {business.location.city}</li>

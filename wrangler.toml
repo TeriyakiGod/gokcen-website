@@ -16,7 +16,7 @@ name = "EMAIL"
 [vars]
 LESSONS_CALENDAR_ID = ""
 PETSITTING_CALENDAR_ID = ""
-OWNER_EMAIL = ""
+OWNER_EMAIL = "gokcenakdag51@gmail.com"
 FROM_EMAIL = ""
 # "true" also emails a confirmation to the client. Needs the Workers Paid plan.
 SEND_CONFIRMATIONS = "false"

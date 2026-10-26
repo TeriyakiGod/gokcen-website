@@ -24,7 +24,7 @@ const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
     <meta name="theme-color" content="#ff7a5c" />
     <meta property="og:title" content={title ?? d.meta.title} />
     <meta property="og:description" content={d.meta.description} />
-    <meta property="og:image" content={`${site}/photos/hero.svg`} />
+    <meta property="og:image" content={`${site}/photos/hero.webp`} />
     {langs.map((l) => <link rel="alternate" hreflang={l} href={`${site}/${l}/${path}`} />)}
     <script is:inline>
       (function () {

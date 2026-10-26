@@ -17,6 +17,10 @@ const d = t(lang).about;
       <SectionTitle tag={d.tag} title={d.title} center={false} />
       <p class="text-lg leading-relaxed">{d.p1}</p>
       <p class="mt-4 text-lg leading-relaxed">{d.p2}</p>
+      <p class="mt-4 text-lg leading-relaxed">{d.p3}</p>
+      <ul class="mt-6 flex flex-wrap gap-2">
+        {d.quals.map((q) => <li class="rounded-full bg-sky px-3 py-1 text-sm font-bold">🎓 {q}</li>)}
+      </ul>
       <dl class="mt-8 grid grid-cols-3 gap-3">
         {d.facts.map((f) => (
           <div class="card p-4 text-center">
