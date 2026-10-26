@@ -30,7 +30,7 @@ function demoData(now: Date): { lessons: Busy[]; petSitting: Busy[] } {
 
 export async function handleAvailability(request: Request, env: Env, ctx: ExecutionContext) {
   const cache = caches.default;
-  const cacheKey = new Request(new URL('/api/availability?v=2', request.url).toString());
+  const cacheKey = new Request(new URL('/api/availability?v=3', request.url).toString());
   const cached = await cache.match(cacheKey);
   if (cached) return cached;
 
