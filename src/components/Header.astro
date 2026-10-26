@@ -41,7 +41,10 @@ const links = [
       <button id="theme-toggle" type="button" class="grid size-9 place-items-center rounded-full border border-line" aria-label="Toggle dark mode">
         <span class="dark:hidden" aria-hidden="true">🌙</span><span class="hidden dark:inline" aria-hidden="true">☀️</span>
       </button>
-      <a href={`${base}#request`} class="btn-bone btn-primary hidden !py-2 text-sm sm:inline-flex">{d.nav.book}</a>
+      <a href={`${base}#request`} class="book-btn hidden sm:inline-flex" aria-label={d.nav.book}>
+        <span class="book-page book-left" aria-hidden="true">{d.nav.bookPages[0]}</span>
+        <span class="book-page book-right" aria-hidden="true">{d.nav.bookPages[1]}</span>
+      </a>
       <button id="menu-toggle" type="button" class="grid size-9 place-items-center rounded-full border border-line lg:hidden" aria-expanded="false" aria-controls="mobile-menu" aria-label="Menu">☰</button>
     </div>
   </nav>

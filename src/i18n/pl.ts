@@ -15,6 +15,7 @@ const pl: Dict = {
     gallery: 'Galeria',
     faq: 'Pytania',
     book: 'Zarezerwuj',
+    bookPages: ['Umów', 'się'],
     language: 'Język',
   },
   hero: {
@@ -32,9 +33,9 @@ const pl: Dict = {
     tag: 'o mnie',
     title: 'Cześć, jestem Gökçen!',
     p1: 'Pochodzę z Antalyi w Turcji. Przyjechałam do Polski na studia, zakochałam się w Gdańsku (i w pewnym Polaku), a teraz mieszkamy na VII Dworze z naszym psem Montim.',
-    p2: 'Mam tytuł magistra z nauczania języka angielskiego oraz certyfikaty CELTA i TEFL. Uczę online, indywidualnie, a moje lekcje są swobodne, praktyczne i pełne prawdziwej rozmowy.',
+    p2: 'Mam dyplom z nauczania języka angielskiego oraz certyfikat IELTS. Uczę online, indywidualnie, a moje lekcje są swobodne, praktyczne i pełne prawdziwej rozmowy.',
     p3: 'Psy to moja druga wielka miłość. Pomagam bezdomnym psom, kiedy tylko mogę — w Turcji uratowałam mojego psa Dosta, a Montiego adoptowaliśmy ze schroniska w Gdańsku. Każdy pies, który u nas zostaje, dostaje tyle samo miłości.',
-    quals: ['Magister nauczania języka angielskiego', 'CELTA', 'TEFL'],
+    quals: ['Dyplom z nauczania języka angielskiego', 'IELTS'],
     facts: [
       { label: 'Lat nauczania', value: '5+' },
       { label: 'Uczniów', value: '50+' },

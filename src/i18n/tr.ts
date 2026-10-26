@@ -15,6 +15,7 @@ const tr: Dict = {
     gallery: 'Galeri',
     faq: 'SSS',
     book: 'Rezervasyon',
+    bookPages: ['Hemen', 'ayırt'],
     language: 'Dil',
   },
   hero: {
@@ -32,9 +33,9 @@ const tr: Dict = {
     tag: 'hakkımda',
     title: 'Merhaba, ben Gökçen!',
     p1: 'Antalya’lıyım. Polonya’ya okumak için geldim, Gdańsk’a (ve bir Polonyalıya) aşık oldum; şimdi köpeğimiz Monti ile birlikte VII Dwór’da yaşıyoruz.',
-    p2: 'İngilizce öğretmenliği alanında yüksek lisansım, ayrıca CELTA ve TEFL sertifikalarım var. Online ve birebir ders veriyorum; derslerim rahat, pratik ve gerçek sohbetlerle dolu.',
+    p2: 'İngilizce öğretmenliği diplomam ve IELTS sertifikam var. Online ve birebir ders veriyorum; derslerim rahat, pratik ve gerçek sohbetlerle dolu.',
     p3: 'Köpekler benim diğer büyük aşkım. Elimden geldikçe sokak köpeklerine yardım ediyorum — köpeğim Dost’u Türkiye’de kurtardım, Monti’yi ise Gdańsk’taki bir barınaktan sahiplendik. Bizde kalan her köpek aynı sevgiyi görür.',
-    quals: ['İngilizce Öğretmenliği Yüksek Lisansı', 'CELTA', 'TEFL'],
+    quals: ['İngilizce Öğretmenliği Diploması', 'IELTS'],
     facts: [
       { label: 'Yıllık deneyim', value: '5+' },
       { label: 'Öğrenci', value: '50+' },

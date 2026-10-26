@@ -134,6 +134,45 @@ h1, h2, h3, .font-display { font-family: var(--font-display); }
 .btn-secondary { --bone: var(--c-ball); color: #1d1b2e; }
 .btn-secondary:hover { --bone: #d9e04a; }
 
+/* Open-book "Book | now" button in the header: two pages dipping towards the spine,
+   each sitting on a coral hardcover edge. */
+.book-btn {
+  align-items: center;
+  padding: 0.35rem 0.25rem 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--c-ink);
+  transition: transform 0.2s ease;
+}
+.book-page {
+  display: grid;
+  place-items: center;
+  min-width: 3.4rem;
+  height: 2rem;
+  padding: 0 0.65rem;
+  background:
+    repeating-linear-gradient(to bottom, transparent 0 0.42rem, color-mix(in oklab, var(--c-sky) 75%, transparent) 0.42rem 0.47rem),
+    var(--c-paper);
+  border: 1.5px solid color-mix(in oklab, var(--c-ink) 20%, transparent);
+  transition: transform 0.25s ease;
+}
+.book-left {
+  border-radius: 0.7rem 0.1rem 0.1rem 0.5rem;
+  transform: skewY(7deg);
+  box-shadow: -3px 4px 0 0 var(--c-coral);
+}
+.book-right {
+  color: var(--c-coral);
+  border-left-color: color-mix(in oklab, var(--c-ink) 35%, transparent);
+  border-radius: 0.1rem 0.7rem 0.5rem 0.1rem;
+  transform: skewY(-7deg);
+  box-shadow: 3px 4px 0 0 var(--c-coral);
+}
+.book-btn:hover { transform: translateY(-2px); }
+.book-btn:hover .book-left { transform: skewY(3deg); }
+.book-btn:hover .book-right { transform: skewY(-3deg); }
+
 .paw-divider {
   height: 2.5rem;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='40' viewBox='0 0 80 40'%3E%3Cg fill='%23ff7a5c' opacity='.35'%3E%3Cellipse cx='20' cy='26' rx='6' ry='5'/%3E%3Ccircle cx='14' cy='18' r='2.4'/%3E%3Ccircle cx='18' cy='15' r='2.4'/%3E%3Ccircle cx='23' cy='15' r='2.4'/%3E%3Ccircle cx='27' cy='18' r='2.4'/%3E%3Cellipse cx='58' cy='16' rx='6' ry='5'/%3E%3Ccircle cx='52' cy='8' r='2.4'/%3E%3Ccircle cx='56' cy='5' r='2.4'/%3E%3Ccircle cx='61' cy='5' r='2.4'/%3E%3Ccircle cx='65' cy='8' r='2.4'/%3E%3C/g%3E%3C/svg%3E") repeat-x center;

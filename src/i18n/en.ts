@@ -13,6 +13,7 @@ const en = {
     gallery: 'Gallery',
     faq: 'FAQ',
     book: 'Book now',
+    bookPages: ['Book', 'now'],
     language: 'Language',
   },
   hero: {
@@ -30,9 +31,9 @@ const en = {
     tag: 'about',
     title: 'Hi, I’m Gökçen!',
     p1: 'I’m from Antalya, Turkey. I came to Poland to study, fell in love with Gdańsk (and with a Polish guy), and now we live in VII Dwór with our dog Monti.',
-    p2: 'I have a Master’s degree in English language teaching and I’m CELTA and TEFL certified. I teach online, one-to-one, and my lessons are relaxed, practical and full of real conversation.',
+    p2: 'I have a degree in English language teaching and an IELTS certificate. I teach online, one-to-one, and my lessons are relaxed, practical and full of real conversation.',
     p3: 'Dogs are my other great love. I help stray dogs whenever I can — I rescued my dog Dost in Turkey, and we adopted Monti from a shelter here in Gdańsk. Every dog that stays with us gets the same love.',
-    quals: ['MA in English Language Teaching', 'CELTA', 'TEFL'],
+    quals: ['Degree in English Language Teaching', 'IELTS'],
     facts: [
       { label: 'Years teaching', value: '5+' },
       { label: 'Students taught', value: '50+' },
