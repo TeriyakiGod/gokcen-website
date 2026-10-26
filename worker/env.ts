@@ -2,9 +2,11 @@ export interface Env {
   GOOGLE_SERVICE_ACCOUNT_JSON?: string;
   LESSONS_CALENDAR_ID?: string;
   PETSITTING_CALENDAR_ID?: string;
-  RESEND_API_KEY?: string;
+  ASSETS: Fetcher;
+  EMAIL?: SendEmail;
   OWNER_EMAIL?: string;
   FROM_EMAIL?: string;
+  SEND_CONFIRMATIONS?: string;
   TURNSTILE_SECRET_KEY?: string;
 }
 

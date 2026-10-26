@@ -1,11 +1,24 @@
 name = "gokcen-website"
-pages_build_output_dir = "./dist"
+main = "worker/index.ts"
 compatibility_date = "2026-10-01"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "404-page"
+run_worker_first = ["/api/*"]
+
+# Cloudflare Email Service. Requests go to OWNER_EMAIL, which must be a verified
+# destination address (free on every plan). The sender domain must be onboarded.
+[[send_email]]
+name = "EMAIL"
 
 [vars]
 LESSONS_CALENDAR_ID = ""
 PETSITTING_CALENDAR_ID = ""
 OWNER_EMAIL = ""
 FROM_EMAIL = ""
-# Secrets (set with `wrangler pages secret put NAME`):
-#   GOOGLE_SERVICE_ACCOUNT_JSON, RESEND_API_KEY, TURNSTILE_SECRET_KEY
+# "true" also emails a confirmation to the client. Needs the Workers Paid plan.
+SEND_CONFIRMATIONS = "false"
+# Secrets (set with `wrangler secret put NAME`):
+#   GOOGLE_SERVICE_ACCOUNT_JSON, TURNSTILE_SECRET_KEY

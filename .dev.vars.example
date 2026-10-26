@@ -1,9 +1,10 @@
 # Copy to .dev.vars for local development with `npm run preview`. Never commit .dev.vars.
+# Locally, `wrangler dev` simulates the EMAIL binding: emails are logged, not sent.
 GOOGLE_SERVICE_ACCOUNT_JSON={"client_email":"...","private_key":"-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"}
 LESSONS_CALENDAR_ID=xxxxxxxx@group.calendar.google.com
 PETSITTING_CALENDAR_ID=yyyyyyyy@group.calendar.google.com
-RESEND_API_KEY=re_xxxxxxxx
 OWNER_EMAIL=gokcen@example.com
-FROM_EMAIL=Gökçen <hello@your-domain.pl>
+FROM_EMAIL=hello@your-domain.pl
+SEND_CONFIRMATIONS=false
 # Cloudflare's published "always passes" test secret; replace in production.
 TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA

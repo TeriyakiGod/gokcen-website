@@ -1,8 +1,8 @@
 # gokcen-website
 This is a website for my wife's business. She teaches English online and pet sits dogs.
 
-Built with Astro + Tailwind, Three.js for the dogs, and Cloudflare Pages Functions for the
-calendar and the request form. Pages are in English (`/en/`), Polish (`/pl/`) and Turkish (`/tr/`).
+Built with Astro + Tailwind, Three.js for the dogs, and a Cloudflare Worker (`worker/`) that
+serves the site plus the calendar and request-form endpoints. Pages are in English (`/en/`), Polish (`/pl/`) and Turkish (`/tr/`).
 
 ## Run it locally
 
@@ -13,7 +13,8 @@ npm run build && npm run preview   # full site incl. calendar + form at http://l
 ```
 
 Without any secrets the calendar shows example data and the form logs requests to the
-terminal instead of emailing them.
+terminal instead of emailing them. With `OWNER_EMAIL` and `FROM_EMAIL` set in `.dev.vars`,
+`wrangler dev` simulates the email binding and logs the full email instead of sending it.
 
 ## Where to change things
 
@@ -44,15 +45,28 @@ The site only ever sees *busy/free* times, never event titles.
 
 Changes in her calendar appear on the site within ~10 minutes.
 
-## Email (Resend) and spam protection (Turnstile)
-1. Create a [Resend](https://resend.com) account, verify the site's domain, create an API key.
-2. In the Cloudflare dashboard create a **Turnstile** widget for the domain; note the site key and secret key.
-3. Set `RESEND_API_KEY`, `OWNER_EMAIL` (where requests go), `FROM_EMAIL` (e.g. `Gökçen <hello@domain.pl>`),
-   `TURNSTILE_SECRET_KEY`, and the build variable `PUBLIC_TURNSTILE_SITE_KEY`.
+## Email (Cloudflare Email Service) and spam protection (Turnstile)
+Requests are emailed through the Worker's `EMAIL` (`send_email`) binding. The domain must use
+Cloudflare DNS.
 
-## Deploying to Cloudflare Pages
-Connect the GitHub repo in *Workers & Pages → Create → Pages*, with build command `npm run build`
-and output directory `dist`. Add the variables above under *Settings → Variables and secrets*
-(mark the keys as secrets). Then add the custom domain.
+1. In the Cloudflare dashboard go to *Email Service*. Under *Email Routing*, add Gökçen's inbox
+   as a **destination address** and click the verification link it receives.
+2. Under *Email Sending*, **Onboard Domain** for the site's domain (adds SPF/DKIM/DMARC records).
+3. Set `OWNER_EMAIL` (the verified inbox) and `FROM_EMAIL` (e.g. `hello@domain.pl`) in `wrangler.toml`.
+4. Optional: set `SEND_CONFIRMATIONS = "true"` to also email each client a confirmation in their
+   language. Sending to addresses other than verified ones needs the **Workers Paid** plan
+   ($5/month); notifications to Gökçen work on the free plan.
+5. In the dashboard create a **Turnstile** widget for the domain. Set the secret with
+   `wrangler secret put TURNSTILE_SECRET_KEY` and the build variable `PUBLIC_TURNSTILE_SITE_KEY`.
+
+## Deploying to Cloudflare Workers
+```bash
+wrangler secret put GOOGLE_SERVICE_ACCOUNT_JSON
+wrangler secret put TURNSTILE_SECRET_KEY
+PUBLIC_TURNSTILE_SITE_KEY=<site key> npm run deploy
+```
+Or connect the GitHub repo in *Workers & Pages → Create → Import a repository*, with build command
+`npm run build` and deploy command `npx wrangler deploy`. Then add the custom domain under the
+Worker's *Settings → Domains & Routes*.
 
 For local testing with real services, copy `.dev.vars.example` to `.dev.vars` and fill it in.

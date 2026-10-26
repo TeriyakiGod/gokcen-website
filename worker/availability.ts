@@ -1,5 +1,5 @@
-import { json, type Env } from '../_lib/env';
-import { freeBusy, getAccessToken, type Busy } from '../_lib/google';
+import { json, type Env } from './env';
+import { freeBusy, getAccessToken, type Busy } from './google';
 
 const WEEKS = 9;
 const CACHE_SECONDS = 600;
@@ -28,7 +28,7 @@ function demoData(now: Date): { lessons: Busy[]; petSitting: Busy[] } {
   return { lessons, petSitting };
 }
 
-export const onRequestGet: PagesFunction<Env> = async ({ request, env, waitUntil }) => {
+export async function handleAvailability(request: Request, env: Env, ctx: ExecutionContext) {
   const cache = caches.default;
   const cacheKey = new Request(new URL('/api/availability', request.url).toString());
   const cached = await cache.match(cacheKey);
@@ -57,6 +57,6 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env, waitUntil
   }
 
   const res = json(body, { headers: { 'cache-control': `public, max-age=${CACHE_SECONDS}` } });
-  waitUntil(cache.put(cacheKey, res.clone()));
+  ctx.waitUntil(cache.put(cacheKey, res.clone()));
   return res;
-};
+}

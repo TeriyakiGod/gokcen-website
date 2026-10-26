@@ -1,4 +1,4 @@
-import { json, type Env } from '../_lib/env';
+import { json, type Env } from './env';
 
 type Lang = 'en' | 'pl' | 'tr';
 
@@ -34,16 +34,23 @@ async function verifyTurnstile(token: string, secret: string, ip: string | null)
   return out.success;
 }
 
-async function sendEmail(env: Env, msg: { to: string; subject: string; html: string; reply_to?: string }) {
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json' },
-    body: JSON.stringify({ from: env.FROM_EMAIL, ...msg }),
+const htmlToText = (html: string) =>
+  html.replace(/<br\s*\/?>/g, '\n').replace(/<\/b><\/td>/g, ':').replace(/<\/(tr|p|h2)>/g, '\n').replace(/<[^>]+>/g, ' ')
+    .replace(/[ \t]+/g, ' ').replace(/ ?\n ?/g, '\n').replace(/ :/g, ':')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&').trim();
+
+function sendEmail(env: Env, msg: { to: string; subject: string; html: string; replyTo: string }) {
+  return env.EMAIL!.send({
+    from: { email: env.FROM_EMAIL!, name: 'Gökçen' },
+    to: msg.to,
+    replyTo: msg.replyTo,
+    subject: msg.subject,
+    html: msg.html,
+    text: htmlToText(msg.html),
   });
-  if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`);
 }
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+export async function handleRequest(request: Request, env: Env) {
   let raw: Record<string, unknown>;
   try {
     raw = await request.json();
@@ -113,21 +120,24 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     .join('');
   const ownerHtml = `<div style="font-family:system-ui,sans-serif"><h2 style="color:#ff7a5c">${esc(subject)}</h2><table style="border-collapse:collapse">${rows}</table><p style="color:#5d5a6e">Reply to this email to answer ${esc(name)} directly.</p></div>`;
 
-  if (!env.RESEND_API_KEY || !env.OWNER_EMAIL || !env.FROM_EMAIL) {
+  if (!env.EMAIL || !env.OWNER_EMAIL || !env.FROM_EMAIL) {
     // Not configured yet (local dev): log instead of sending.
     console.log('[request] email not configured; would send:', subject, fields);
     return json({ ok: true, dev: true });
   }
 
   try {
-    await sendEmail(env, { to: env.OWNER_EMAIL, subject, html: ownerHtml, reply_to: email });
-    const c = confirmation[lang];
-    await sendEmail(env, { to: email, subject: c.subject, html: `<div style="font-family:system-ui,sans-serif;font-size:16px">${c.body(esc(name))}</div>`, reply_to: env.OWNER_EMAIL }).catch((e) =>
-      console.error('[request] confirmation failed', e),
-    );
+    await sendEmail(env, { to: env.OWNER_EMAIL, subject, html: ownerHtml, replyTo: email });
+    // Emailing arbitrary addresses needs the Workers Paid plan, so confirmations are opt-in.
+    if (env.SEND_CONFIRMATIONS === 'true') {
+      const c = confirmation[lang];
+      await sendEmail(env, { to: email, subject: c.subject, html: `<div style="font-family:system-ui,sans-serif;font-size:16px">${c.body(esc(name))}</div>`, replyTo: env.OWNER_EMAIL }).catch((e) =>
+        console.error('[request] confirmation failed', e),
+      );
+    }
   } catch (e) {
     console.error('[request] send failed', e);
     return json({ error: 'send_failed' }, { status: 502 });
   }
   return json({ ok: true });
-};
+}
