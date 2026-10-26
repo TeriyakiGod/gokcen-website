@@ -30,7 +30,7 @@ function demoData(now: Date): { lessons: Busy[]; petSitting: Busy[] } {
 
 export async function handleAvailability(request: Request, env: Env, ctx: ExecutionContext) {
   const cache = caches.default;
-  const cacheKey = new Request(new URL('/api/availability', request.url).toString());
+  const cacheKey = new Request(new URL('/api/availability?v=2', request.url).toString());
   const cached = await cache.match(cacheKey);
   if (cached) return cached;
 
@@ -44,6 +44,11 @@ export async function handleAvailability(request: Request, env: Env, ctx: Execut
     try {
       const token = await getAccessToken(env.GOOGLE_SERVICE_ACCOUNT_JSON, 'https://www.googleapis.com/auth/calendar.freebusy');
       const cals = await freeBusy(token, [env.LESSONS_CALENDAR_ID, env.PETSITTING_CALENDAR_ID], now, until);
+      // Google reports an unreadable calendar (not shared, wrong ID) as "no busy times" plus errors.
+      for (const id of [env.LESSONS_CALENDAR_ID, env.PETSITTING_CALENDAR_ID]) {
+        const errors = cals[id]?.errors;
+        if (!cals[id] || errors?.length) throw new Error(`calendar ${id.slice(0, 8)}…: ${JSON.stringify(errors ?? 'missing')}`);
+      }
       body = {
         demo: false,
         updated: now.toISOString(),

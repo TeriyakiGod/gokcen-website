@@ -16,8 +16,8 @@ run_worker_first = ["/api/*"]
 name = "EMAIL"
 
 [vars]
-LESSONS_CALENDAR_ID = ""
-PETSITTING_CALENDAR_ID = ""
+LESSONS_CALENDAR_ID = "09fe8f0fc2e2e538ae67217ca03ed651da79d3542ce40d7f9aeb8935ab04fcb2@group.calendar.google.com"
+PETSITTING_CALENDAR_ID = "a585fe63ef29487d92427e2da50c9c7f32a0c625dbb5d44fe5ce479c95bb0a95@group.calendar.google.com"
 OWNER_EMAIL = "gokcenakdag51@gmail.com"
 FROM_EMAIL = "hello@gokcen.kacperochnik.eu"
 # "true" also emails a confirmation to the client. Needs the Workers Paid plan.
