@@ -15,7 +15,7 @@ const tr: Dict = {
     gallery: 'Galeri',
     faq: 'SSS',
     book: 'Rezervasyon',
-    bookPages: ['Hemen', 'ayırt'],
+    bookPages: ['Book', 'now'],
     language: 'Dil',
   },
   hero: {

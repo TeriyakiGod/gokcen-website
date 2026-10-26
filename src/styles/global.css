@@ -1,15 +1,15 @@
 @import 'tailwindcss';
-@import '@fontsource/fredoka/500.css';
-@import '@fontsource/fredoka/600.css';
-@import '@fontsource/nunito/400.css';
-@import '@fontsource/nunito/700.css';
-@import '@fontsource/nunito/400-italic.css';
+@import '@fontsource/quicksand/400.css';
+@import '@fontsource/quicksand/500.css';
+@import '@fontsource/quicksand/600.css';
+@import '@fontsource/quicksand/700.css';
 
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
 @theme {
-  --font-display: 'Fredoka', ui-rounded, system-ui, sans-serif;
-  --font-sans: 'Nunito', system-ui, sans-serif;
+  /* Quicksand covers Polish and Turkish letters (ą ę ł ń ś ź ż, ğ ı İ ş) */
+  --font-display: 'Quicksand', ui-rounded, system-ui, sans-serif;
+  --font-sans: 'Quicksand', system-ui, sans-serif;
 
   --color-cream: var(--c-cream);
   --color-paper: var(--c-paper);

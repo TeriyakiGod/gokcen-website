@@ -15,7 +15,7 @@ const pl: Dict = {
     gallery: 'Galeria',
     faq: 'Pytania',
     book: 'Zarezerwuj',
-    bookPages: ['Umów', 'się'],
+    bookPages: ['Book', 'now'],
     language: 'Język',
   },
   hero: {
